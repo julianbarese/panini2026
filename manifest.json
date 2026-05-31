@@ -1,0 +1,16 @@
+{
+  "name": "Álbum Panini Mundial 2026",
+  "short_name": "Panini 2026",
+  "description": "Seguí tu colección del álbum Panini FIFA World Cup 2026",
+  "start_url": "/panini2026/",
+  "display": "standalone",
+  "background_color": "#5BC4E5",
+  "theme_color": "#E6007E",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f3c6.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "categories": ["sports", "games"]
+}
