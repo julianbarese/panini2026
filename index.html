@@ -587,10 +587,10 @@ firebase.initializeApp({
   messagingSenderId: "20106885377",
   appId: "1:20106885377:web:265daf7f32bfdbdb348300"
 });
-const auth = firebase.auth();
-const db   = firebase.firestore();
+var auth = firebase.auth();
+var db   = firebase.firestore();
 
-let unsubCol = null, unsubFix = null, saveTimer = null;
+var unsubCol = null, unsubFix = null, saveTimer = null;
 
 /* ── LOGIN / LOGOUT ── */
 document.getElementById('btn-login').addEventListener('click', function() {
@@ -1430,10 +1430,6 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('/panini2026/
 document.addEventListener('DOMContentLoaded', function() {
   applyDark();
   var dtb = document.getElementById('dark-toggle-btn'); if (dtb) dtb.addEventListener('click', toggleDark);
-  document.getElementById('btn-login').addEventListener('click', function() {
-    auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
-  });
-  document.getElementById('btn-logout').addEventListener('click', function() { auth.signOut(); });
 
   document.getElementById('si').addEventListener('input', function() {
     var codes = this.value.trim().toUpperCase().replace(/,/g,' ').split(/\s+/).filter(Boolean);
