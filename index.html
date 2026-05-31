@@ -391,7 +391,7 @@ body{font-family:'Barlow',sans-serif;background:var(--sky);color:var(--dark);min
 <script type="module">
 /* ── IMPORTS (deben ir primero en un módulo ES) ── */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, where, getDocs, addDoc, updateDoc, arrayUnion }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -413,11 +413,34 @@ const app = initializeApp({
 });
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Handle redirect result (Safari/mobile)
+getRedirectResult(auth).then(result => {
+  if (result && result.user) {
+    console.log('Redirect login OK:', result.user.email);
+  }
+}).catch(e => {
+  if (e.code !== 'auth/no-current-user') {
+    console.error('Redirect result error:', e);
+  }
+});
 let unsubCol = null, unsubFix = null, saveTimer = null;
 
 window.loginGoogle = async () => {
-  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch(e){ showToast('Error al iniciar sesión'); }
+  try {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isMobile || isSafari) {
+      await signInWithRedirect(auth, new GoogleAuthProvider());
+    } else {
+      await signInWithPopup(auth, new GoogleAuthProvider());
+    }
+  } catch(e) {
+    console.error('Login error:', e);
+    // Fallback to redirect
+    try { await signInWithRedirect(auth, new GoogleAuthProvider()); }
+    catch(e2) { alert('Error al iniciar sesión: ' + e2.message); }
+  }
 };
 window.logOut = async () => {
   if(unsubCol){ unsubCol(); unsubCol=null; }
