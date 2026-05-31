@@ -8,6 +8,8 @@
 <title>⚽ Álbum Panini — Mundial 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- Firebase compat SDK: funciona en Safari/iOS sin módulos ES -->
+<!-- Twemoji: emoji flags en todos los dispositivos incluyendo Windows/PC -->
+<script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -195,6 +197,12 @@ body{font-family:'Barlow',sans-serif;background:var(--sky);color:var(--dark);min
 .mbtn.cancel{background:#F1F3F6;color:var(--dark)}.mbtn.ok{background:var(--mag);color:#fff}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 22px;border-radius:24px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.06em;z-index:200;opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Twemoji: makes emoji images look inline like text */
+img.emoji{height:1em;width:1em;margin:0 .03em 0 .05em;vertical-align:-0.1em;display:inline-block}
+.mflag img.emoji{height:1.2em;width:1.2em;vertical-align:middle}
+.cf2 img.emoji,.gtflag img.emoji{height:1em;width:1em;vertical-align:middle}
+.acf img.emoji{height:1em;width:1em;vertical-align:middle}
+.stk-f img.emoji{height:.9em;width:.9em}
 @media(min-width:600px){.mflag{font-size:28px}.mname{font-size:15px}.mscore{font-size:32px;min-width:70px}.gtflag{font-size:22px}.gtname{font-size:14px}}
 @media(max-width:400px){.fn2{font-size:11px}.mname{font-size:12px}}
 </style>
@@ -676,7 +684,7 @@ function tC(code){
   if(!sw) return;
   var open=sw.style.display!=='none';
   if(open){ sw.style.display='none'; ca.style.display='none'; cv.classList.remove('open'); }
-  else{ sw.style.display='block'; ca.style.display='flex'; cv.classList.add('open'); if(!sw._built){ buildRows(code,sw); sw._built=true; } else { refreshAllRows(code); } }
+  else{ sw.style.display='block'; ca.style.display='flex'; cv.classList.add('open'); if(!sw._built){ buildRows(code,sw); sw._built=true; } else { refreshAllRows(code); } if(typeof twemoji !== 'undefined') twemoji.parse(sw, {folder:'svg',ext:'.svg'}); }
 }
 
 function buildRows(code,sw){
@@ -719,6 +727,8 @@ function rebuildAll(){
   countries.forEach(function(c){ list.appendChild(buildCard(c)); });
   var lbl=document.getElementById('main-label');
   if(lbl) lbl.textContent=curFilter==='falta'?'Me faltan':curFilter==='tengo'?'Tengo':curFilter==='doble'?'Repetidas':q?'Resultados':'Las 48 Selecciones';
+
+  if(typeof twemoji !== 'undefined') twemoji.parse(document.getElementById('cl'), {folder:'svg',ext:'.svg'});
 }
 
 function mkTile(k,num,nm,iF,iC){
@@ -812,6 +822,7 @@ function renderFixtureActive(){
     });
     cont.appendChild(dd);
   });
+  if(typeof twemoji !== 'undefined') twemoji.parse(cont, {folder:'svg',ext:'.svg'});
 }
 function saveProdeMatch(id,side,val){
   if(!PRODE) PRODE={};
@@ -894,6 +905,7 @@ function renderGroupsActive(){
     });
     wrap.appendChild(table); gb.appendChild(wrap); cont.appendChild(gb);
   });
+  if(typeof twemoji !== 'undefined') twemoji.parse(cont, {folder:'svg',ext:'.svg'});
 }
 
 function inviteFriend(){
@@ -928,6 +940,8 @@ document.addEventListener('DOMContentLoaded', function(){
   qi.addEventListener('focus', function(){ if(this.value) showAC(this.value); });
   var fg=document.getElementById('fg'); FWC.forEach(function(s){ fg.appendChild(mkTile('FWC_'+s.c,s.c,s.n,true,false)); });
   var cg=document.getElementById('cg'); COCA.forEach(function(s){ cg.appendChild(mkTile('CC_'+s.c,s.c,s.n,false,true)); });
+  // Parse emoji on initial load
+  if(typeof twemoji !== 'undefined') twemoji.parse(document.body, {folder:'svg',ext:'.svg'});
 });
 </script>
 </body>
