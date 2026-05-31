@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -114,6 +115,7 @@ window.sendProdeInvite = async (email) => {
   showToast('✉️ Invitación enviada a '+email);
 };
 
+</script>
 
 <style>
 :root{--sky:#5BC4E5;--mag:#E6007E;--dark:#0A1628;--green:#00C853;--blue:#2979FF;--rad:14px;--rs:8px}
@@ -352,6 +354,7 @@ body{font-family:'Barlow',sans-serif;background:var(--sky);color:var(--dark);min
 }
 @media(max-width:400px){.fn2{font-size:11px}.mname{font-size:12px}}
 </style>
+
 </head>
 <body>
 <div class="bg"><div class="bg-s"></div><div class="bg-l"></div><div class="bg-26">26</div><div class="bg-c1"></div><div class="bg-c2"></div></div>
@@ -492,6 +495,7 @@ body{font-family:'Barlow',sans-serif;background:var(--sky);color:var(--dark);min
   </div>
 </div>
 
+<script type="module">
 /* ═══ DATA ═══ */
 window.COL={};window.RESULTS={};window.PRODE={};window.PRODE_GROUPS=[];
 
@@ -1137,6 +1141,7 @@ window.inviteFriend = function(){
 
 // Init
 window.RESULTS={};window.PRODE={};
+
 </script>
 </body>
 </html>
