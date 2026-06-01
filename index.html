@@ -332,6 +332,21 @@ body.dark .figu-nm{color:#e8f4fd}
 </style>
 </head>
 <body>
+<div id="dbg" style="position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);color:#0f0;font-family:monospace;font-size:11px;padding:8px;z-index:9999;max-height:140px;overflow-y:auto;display:none"></div>
+<script>
+window.dbg=function(msg){
+  var el=document.getElementById('dbg');
+  if(!el)return;
+  el.style.display='block';
+  el.innerHTML+=new Date().toLocaleTimeString()+': '+msg+'<br>';
+  el.scrollTop=el.scrollHeight;
+  console.log('[DBG]',msg);
+};
+window.onerror=function(msg,src,line,col,err){
+  window.dbg('ERROR L'+line+': '+msg);
+  return false;
+};
+</script>
 <button id="dt" title="Oscuro/Claro">&#127769;</button>
 <div class="figu-ov" id="fov" style="display:none" onclick="if(event.target===this)cFM()"><div class="figu-bx"><img class="figu-img" id="fimg" src="" alt=""/><div class="figu-nm" id="fnm"></div><div class="figu-cd" id="fcd"></div><button class="figu-cl" onclick="cFM()">Cerrar</button></div></div>
 <div class="bg"><div class="bg-s"></div><div class="bg-l"></div><div class="bg-26">26</div><div class="bg-c1"></div><div class="bg-c2"></div></div>
@@ -478,6 +493,7 @@ body.dark .figu-nm{color:#e8f4fd}
 /* ══════════════════════════════════════
    FIREBASE INIT (compat SDK - sin módulos ES)
 ══════════════════════════════════════ */
+window.dbg&&window.dbg('Firebase init...');
 firebase.initializeApp({
   apiKey: "AIzaSyDPocaVl2nCID4AwgTB78i6pQJPU0RQTFI",
   authDomain: "album-emma-2026.firebaseapp.com",
@@ -487,12 +503,15 @@ firebase.initializeApp({
   appId: "1:20106885377:web:265daf7f32bfdbdb348300"
 });
 const auth = firebase.auth();
+window.dbg&&window.dbg('auth OK');
 const db   = firebase.firestore();
 
 let unsubCol = null, unsubFix = null, saveTimer = null;
 
 /* ── LOGIN / LOGOUT ── */
+window.dbg&&window.dbg('Registrando btn-login listener...');
 document.getElementById('btn-login').addEventListener('click', function() {
+  window.dbg&&window.dbg('BTN LOGIN CLICKED');
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithRedirect(provider);
 });
@@ -508,8 +527,10 @@ auth.getRedirectResult().then(function(result) {
 }).catch(function(e) { console.error('Redirect error:', e); });
 
 /* ── AUTH STATE ── */
+window.dbg&&window.dbg('Registrando onAuthStateChanged...');
 auth.onAuthStateChanged(function(user) {
-  if (user) {
+  window.dbg&&window.dbg('Usuario: '+(user?user.email:'null'));
+    if (user) {
     document.getElementById('screen-login').style.display = 'none';
     document.getElementById('screen-app').style.display   = 'block';
     document.getElementById('user-name').textContent = user.displayName || user.email;
@@ -1083,8 +1104,8 @@ document.addEventListener('DOMContentLoaded', function(){
 /* Dark mode */
 var _dk=localStorage.getItem('pd')==='1';
 function apDk(){document.body.classList.toggle('dark',_dk);var b=document.getElementById('dt');if(b)b.textContent=_dk?'\u2600\uFE0F':'\uD83C\uDF19';}
-apDk();
-document.getElementById('dt').addEventListener('click',function(){_dk=!_dk;localStorage.setItem('pd',_dk?'1':'0');apDk();});
+try{apDk();}catch(e){}
+try{var _dtb=document.getElementById('dt');if(_dtb)_dtb.addEventListener('click',function(){_dk=!_dk;localStorage.setItem('pd',_dk?'1':'0');apDk();});}catch(e){}
 
 /* Twemoji on load */
 if(typeof twemoji!=='undefined') twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
@@ -1356,14 +1377,14 @@ function showFigu(key,num,nm){
 function cFM(){document.getElementById('fov').style.display='none';}
 
 /* Listen for results updates */
-db.collection('tournament').doc('results').onSnapshot(function(snap){
+try{db.collection('tournament').doc('results').onSnapshot(function(snap){
   if(snap.exists){RESULTS=snap.data();cPS();}
-});
+});}catch(e){console.log('results listener err:',e);}
 
 /* Load torneos when user logs in */
-auth.onAuthStateChanged(function(user){
+try{auth.onAuthStateChanged(function(user){
   if(user) loadTorneosForUser(user.uid);
-});
+});}catch(e){console.log('torneos auth err:',e);}
 
 /* Service worker */
 if('serviceWorker' in navigator) navigator.serviceWorker.register('/panini2026/sw.js').catch(function(){});
