@@ -457,8 +457,13 @@ document.getElementById('btn-logout').addEventListener('click', function() {
 
 /* ── HANDLE REDIRECT RESULT ── */
 auth.getRedirectResult().then(function(result) {
-  if (result && result.user) console.log('Login OK:', result.user.email);
-}).catch(function(e) { console.error('Redirect error:', e); });
+  if (result && result.user) {
+    console.log('Redirect login OK:', result.user.email);
+    // Force UI update in case onAuthStateChanged hasn't fired yet
+    document.getElementById('screen-login').style.display = 'none';
+    document.getElementById('screen-app').style.display = 'block';
+  }
+}).catch(function(e) { console.error('Redirect error:', e.code, e.message); });
 
 /* ── AUTH STATE ── */
 auth.onAuthStateChanged(function(user) {
