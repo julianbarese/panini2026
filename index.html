@@ -859,7 +859,7 @@ function buildRows(code,sw){
     if(curFilter==='doble'&&!isD(v)) return;
     var row=document.createElement('div');
     row.id='R-'+key; row.className='sr '+(isD(v)?'st-d':v==='tengo'?'st-t':'');
-    row.innerHTML='<span class="fn2">'+code+s.n+'</span><span class="fna" onclick="showFigu(\''+key+'\',\''+code+s.n+'\',\''+s.nm.replace(/\'/g,\'\')+'\')" style="cursor:pointer">'+s.nm+(s.f?'<span class="ffo">★</span>':'')+'</span><span class="fst">'+rowHTML(key)+'</span>';
+    row.innerHTML='<span class="fn2">'+code+s.n+'</span><span class="fna" style="cursor:pointer" data-fkey="'+key+'" data-fnum="'+code+s.n+'" data-fnm="'+s.nm.replace(/"/g,"&quot;")+'" onclick="showFigu(this.dataset.fkey,this.dataset.fnum,this.dataset.fnm)">'+s.nm+(s.f?'<span class="ffo">★</span>':'')+'</span><span class="fst">'+rowHTML(key)+'</span>';
     sw.appendChild(row);
   });
 }
