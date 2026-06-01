@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Login</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<style>
+body{font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#5BC4E5;margin:0}
+#status{background:#fff;padding:20px;border-radius:12px;margin-bottom:20px;min-width:300px;text-align:center;font-size:14px}
+button{padding:14px 24px;border-radius:10px;border:none;background:#fff;cursor:pointer;font-size:16px;font-weight:600;display:flex;align-items:center;gap:10px}
+button img{width:22px}
+#log{background:rgba(0,0,0,.5);color:#fff;padding:12px;border-radius:8px;font-size:12px;min-width:300px;white-space:pre-wrap;margin-top:12px}
+</style>
+</head>
+<body>
+<div id="status">Iniciando Firebase...</div>
+<button id="btn-login">
+  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"/>
+  Continuar con Google
+</button>
+<button id="btn-logout" style="display:none;background:#E6007E;color:#fff;margin-top:10px">Cerrar sesión</button>
+<div id="log">Log:\n</div>
+
+<script>
+var log = document.getElementById('log');
+function addLog(msg) {
+  log.textContent += '\n' + new Date().toLocaleTimeString() + ': ' + msg;
+  console.log(msg);
+}
+
+try {
+  firebase.initializeApp({
+    apiKey: "AIzaSyDPocaVl2nCID4AwgTB78i6pQJPU0RQTFI",
+    authDomain: "album-emma-2026.firebaseapp.com",
+    projectId: "album-emma-2026",
+    storageBucket: "album-emma-2026.firebasestorage.app",
+    messagingSenderId: "20106885377",
+    appId: "1:20106885377:web:265daf7f32bfdbdb348300"
+  });
+  addLog('Firebase inicializado OK');
+} catch(e) {
+  addLog('ERROR initializeApp: ' + e.message);
+}
+
+var auth;
+try {
+  auth = firebase.auth();
+  addLog('auth() OK');
+} catch(e) {
+  addLog('ERROR auth(): ' + e.message);
+}
+
+// Handle redirect result
+auth.getRedirectResult().then(function(result) {
+  if (result && result.user) {
+    addLog('Redirect OK: ' + result.user.email);
+  } else {
+    addLog('getRedirectResult: sin usuario');
+  }
+}).catch(function(e) {
+  addLog('ERROR getRedirectResult: ' + e.code + ' - ' + e.message);
+});
+
+// Auth state
+auth.onAuthStateChanged(function(user) {
+  if (user) {
+    document.getElementById('status').textContent = 'LOGUEADO: ' + user.email;
+    document.getElementById('btn-login').style.display = 'none';
+    document.getElementById('btn-logout').style.display = 'block';
+    addLog('onAuthStateChanged: usuario = ' + user.email);
+  } else {
+    document.getElementById('status').textContent = 'Sin sesión iniciada';
+    document.getElementById('btn-login').style.display = 'flex';
+    document.getElementById('btn-logout').style.display = 'none';
+    addLog('onAuthStateChanged: sin usuario');
+  }
+});
+
+document.getElementById('btn-login').addEventListener('click', function() {
+  addLog('Click en login — iniciando redirect...');
+  var provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithRedirect(provider).then(function() {
+    addLog('signInWithRedirect llamado OK');
+  }).catch(function(e) {
+    addLog('ERROR signInWithRedirect: ' + e.code + ' - ' + e.message);
+  });
+});
+
+document.getElementById('btn-logout').addEventListener('click', function() {
+  auth.signOut().then(function() { addLog('signOut OK'); });
+});
+
+addLog('Script completo cargado');
+</script>
+</body>
+</html>
