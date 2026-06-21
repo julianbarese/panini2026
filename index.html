@@ -830,7 +830,18 @@ function rebuildAll(){
   if(q) countries=COUNTRIES.filter(function(c){ return c.name.toLowerCase().includes(q)||c.code.toLowerCase().includes(q)||c.s.some(function(s){ return s.nm.toLowerCase().includes(q)||(c.code+s.n).toLowerCase().includes(q); }); });
   if(curFilter!=='todos') countries=countries.filter(function(c){ return c.s.some(function(s){ var v=gs(c.code+'_'+s.n); if(curFilter==='tengo') return isT(v); if(curFilter==='falta') return !isT(v); if(curFilter==='doble') return isD(v); return true; }); });
   if(!countries.length){ list.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.6);padding:36px 0;font-family:Barlow Condensed,sans-serif;font-size:15px;letter-spacing:.1em">Sin resultados</div>'; return; }
-  countries.forEach(function(c){ list.appendChild(buildCard(c)); });
+  var autoOpen = curFilter==='falta' || curFilter==='doble';
+  countries.forEach(function(c){
+    list.appendChild(buildCard(c));
+    if(autoOpen){
+      var sw=document.getElementById('SW-'+c.code);
+      var ca=document.getElementById('CA-'+c.code);
+      var cv=document.getElementById('CV-'+c.code);
+      if(sw){ sw.style.display='block'; buildRows(c.code,sw); sw._built=true; sw._builtSort=curSort; sw._builtFilter=curFilter; }
+      if(ca) ca.style.display='flex';
+      if(cv) cv.classList.add('open');
+    }
+  });
   if(typeof twemoji!=='undefined') twemoji.parse(list,{folder:'svg',ext:'.svg'});
   var lbl=document.getElementById('main-label');
   if(lbl) lbl.textContent=curFilter==='falta'?'Me faltan':curFilter==='tengo'?'Tengo':curFilter==='doble'?'Repetidas':q?'Resultados':'Las 48 Selecciones';
