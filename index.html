@@ -489,22 +489,22 @@ auth.onAuthStateChanged(function(user) {
 
 function loadCollection(uid) {
   var ref = db.collection('users').doc(uid).collection('data').doc('collection');
+  /* Primero cargamos con get(), y SOLO despues activamos onSnapshot.
+     Esto evita que onSnapshot pise el estado antes de que termine la carga inicial. */
   ref.get().then(function(snap) {
     if (snap.exists) {
       var d = snap.data(); COL = d.col || {};
       Object.keys(COL).forEach(function(k){ if(COL[k]==='doble') COL[k]=2; });
     } else { COL = {}; }
     rebuildAll(); uS();
-  });
-  /* FIX 3: el onSnapshot ignora updates remotos mientras _saving=true
-     para evitar que Firestore pise cambios locales recientes */
-  unsubCol = ref.onSnapshot(function(snap) {
-    if (_saving) return;
-    if (snap.exists) {
-      var r = snap.data().col || {};
-      Object.keys(r).forEach(function(k){ if(r[k]==='doble') r[k]=2; });
-      COL = r; rebuildAll(); uS();
-    }
+    unsubCol = ref.onSnapshot(function(snap) {
+      if (_saving) return;
+      if (snap.exists) {
+        var r = snap.data().col || {};
+        Object.keys(r).forEach(function(k){ if(r[k]==='doble') r[k]=2; });
+        COL = r; rebuildAll(); uS();
+      }
+    });
   });
 }
 
