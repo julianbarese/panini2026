@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>⚽ Álbum Panini — Mundial 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Firebase compat SDK: funciona en Safari/iOS sin módulos ES -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -197,7 +196,6 @@ body{font-family:'Barlow',sans-serif;background:var(--sky);color:var(--dark);min
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:600px){.mflag{font-size:28px}.mname{font-size:15px}.mscore{font-size:32px;min-width:70px}.gtflag{font-size:22px}.gtname{font-size:14px}}
 @media(max-width:400px){.fn2{font-size:11px}.mname{font-size:12px}}
-
 #dt{position:fixed;top:14px;right:14px;z-index:60;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 #dt:active{transform:scale(.88)}
 body.dark .bg{background:linear-gradient(160deg,#0d1b2a,#12243a 50%,#0a1628)}
@@ -297,7 +295,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
 .ri:focus{border-color:var(--green)}
 .rs2{font-family:'Bebas Neue',sans-serif;font-size:15px;color:rgba(10,22,40,.25)}
 .rok{padding:5px 9px;background:var(--green);color:#fff;border:none;border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;cursor:pointer}
-
 </style>
 </head>
 <body>
@@ -305,7 +302,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
 <div class="bg"><div class="bg-s"></div><div class="bg-l"></div><div class="bg-26">26</div><div class="bg-c1"></div><div class="bg-c2"></div></div>
 <div class="toast" id="toast"></div>
 
-<!-- LOGIN -->
 <div id="screen-login">
   <div class="login-logo">🏆</div>
   <div class="login-title">FIFA WORLD CUP <span>2026</span></div>
@@ -321,7 +317,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
   </div>
 </div>
 
-<!-- APP -->
 <div id="screen-app">
   <div class="topbar">
     <img class="topbar-avatar" id="user-avatar" src="" alt=""/>
@@ -342,7 +337,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
     <button class="tab" id="tab-btn-prode" onclick="switchTab('prode',this)">🎯 Prode</button>
   </div>
 
-  <!-- ÁLBUM -->
   <div id="tab-album">
     <div class="stats">
       <div class="stat"><div class="num nt" id="ct">0</div><div class="lbl">Tengo</div></div>
@@ -387,7 +381,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
     <div class="cl-list" id="cl"></div>
   </div>
 
-  <!-- FIXTURE -->
   <div id="tab-fixture">
     <div class="view-toggle"><button class="view-btn active" onclick="setFxV('list',this)">Lista</button><button class="view-btn" onclick="setFxV('cal',this)">Calendario</button></div>
     <div class="phase-bar">
@@ -402,10 +395,8 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
     <div class="fc2" id="fc2"></div>
   </div>
 
-  <!-- GRUPOS -->
   <div id="tab-groups"><div id="gc"></div></div>
 
-  <!-- PRODE -->
   <div id="tab-prode">
     <div class="prode-cols">
       <div>
@@ -428,7 +419,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
   </div>
 </div>
 
-<!-- MODAL SOBRE -->
 <div class="mo" id="modal-sobre" style="display:none" onclick="if(event.target===this)cS()">
   <div class="mb2">
     <div class="mtitle">🗂 Abrir sobre</div>
@@ -443,9 +433,6 @@ body.dark .cal-cell.has{background:rgba(20,36,56,.95);border-color:rgba(255,255,
 </div>
 
 <script>
-/* ══════════════════════════════════════
-   FIREBASE INIT (compat SDK - sin módulos ES)
-══════════════════════════════════════ */
 firebase.initializeApp({
   apiKey: "AIzaSyDPocaVl2nCID4AwgTB78i6pQJPU0RQTFI",
   authDomain: "album-emma-2026.firebaseapp.com",
@@ -459,7 +446,6 @@ const db   = firebase.firestore();
 
 let unsubCol = null, unsubFix = null, saveTimer = null;
 
-/* ── LOGIN / LOGOUT ── */
 document.getElementById('btn-login').addEventListener('click', function() {
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
@@ -480,12 +466,10 @@ document.getElementById('btn-logout').addEventListener('click', function() {
   auth.signOut();
 });
 
-/* ── HANDLE REDIRECT RESULT ── */
 auth.getRedirectResult().then(function(result) {
   if (result && result.user) console.log('Login OK:', result.user.email);
 }).catch(function(e) { console.error('Redirect error:', e); });
 
-/* ── AUTH STATE ── */
 auth.onAuthStateChanged(function(user) {
   if (user) {
     document.getElementById('screen-login').style.display = 'none';
@@ -512,7 +496,10 @@ function loadCollection(uid) {
     } else { COL = {}; }
     rebuildAll(); uS();
   });
+  /* FIX 3: el onSnapshot ignora updates remotos mientras _saving=true
+     para evitar que Firestore pise cambios locales recientes */
   unsubCol = ref.onSnapshot(function(snap) {
+    if (_saving) return;
     if (snap.exists) {
       var r = snap.data().col || {};
       Object.keys(r).forEach(function(k){ if(r[k]==='doble') r[k]=2; });
@@ -537,12 +524,28 @@ function loadFixtureData() {
   });
 }
 
+/* FIX 2: scheduleSave activa _saving para bloquear onSnapshot remoto */
 function scheduleSave() {
   clearTimeout(saveTimer);
+  _saving = true;
   saveTimer = setTimeout(function() {
     var u = auth.currentUser; if (!u) return;
-    db.collection('users').doc(u.uid).collection('data').doc('collection').set({ col: COL }, { merge: true });
+    db.collection('users').doc(u.uid).collection('data').doc('collection')
+      .set({ col: COL }, { merge: true })
+      .then(function(){ setTimeout(function(){ _saving = false; }, 800); })
+      .catch(function(){ _saving = false; });
   }, 1500);
+}
+
+/* FIX 2b: saveNow guarda inmediatamente (sin delay) para mAll */
+function saveNow() {
+  clearTimeout(saveTimer);
+  _saving = true;
+  var u = auth.currentUser; if (!u) return;
+  db.collection('users').doc(u.uid).collection('data').doc('collection')
+    .set({ col: COL }, { merge: true })
+    .then(function(){ setTimeout(function(){ _saving = false; }, 800); })
+    .catch(function(){ _saving = false; });
 }
 
 function saveProde() {
@@ -558,7 +561,9 @@ function saveResult(matchId, hg, ag, scorers) {
 /* ══════════════════════════════════════
    DATOS
 ══════════════════════════════════════ */
-var COL={}, RESULTS={}, PRODE={};
+/* FIX 1: _saving=false bloquea onSnapshot mientras guardamos */
+var COL={}, RESULTS={}, PRODE={}, _saving=false;
+
 const FWC=[{c:"00",n:"Logo Panini",f:1},{c:"FWC1",n:"Emblema oficial",f:1},{c:"FWC2",n:"Emblema oficial",f:1},{c:"FWC3",n:"Mascotas",f:1},{c:"FWC4",n:"Slogan",f:1},{c:"FWC5",n:"Pelota",f:1},{c:"FWC6",n:"Canadá sedes",f:1},{c:"FWC7",n:"México sedes",f:1},{c:"FWC8",n:"USA sedes",f:1},{c:"FWC9",n:"Italia 1934",f:1},{c:"FWC10",n:"Uruguay 1950",f:1},{c:"FWC11",n:"Alemania 1954",f:1},{c:"FWC12",n:"Brasil 1962",f:1},{c:"FWC13",n:"Alemania 1974",f:1},{c:"FWC14",n:"Argentina 1986",f:1},{c:"FWC15",n:"Brasil 1994",f:1},{c:"FWC16",n:"Brasil 2002",f:1},{c:"FWC17",n:"Italia 2006",f:1},{c:"FWC18",n:"Alemania 2014",f:1},{c:"FWC19",n:"Argentina 2022",f:1}];
 const COCA=[{c:"CC1",n:"Lamine Yamal"},{c:"CC2",n:"J. Kimmich"},{c:"CC3",n:"Harry Kane"},{c:"CC4",n:"S. Giménez"},{c:"CC5",n:"A. Robinson"},{c:"CC6",n:"J. Lerma"},{c:"CC7",n:"Edson Álvarez"},{c:"CC8",n:"Van Dijk"},{c:"CC9",n:"A. Davies"},{c:"CC10",n:"McKennie"},{c:"CC11",n:"L. Martínez"},{c:"CC12",n:"G. Magalhães"}];
 const COUNTRIES=[
@@ -647,44 +652,10 @@ const FIXTURE={
     {date:"26 Jun",day:"Vie",matches:[{id:"g063",h:{f:"🇵🇹",n:"Portugal"},a:{f:"🇨🇩",n:"Congo RD"},venue:"NRG Stadium, Houston",group:"K",time:"14:00 ART"},{id:"g064",h:{f:"🇨🇴",n:"Colombia"},a:{f:"🇺🇿",n:"Uzbekistán"},venue:"Arrowhead, Kansas City",group:"K",time:"14:00 ART"},{id:"g065",h:{f:"🇩🇪",n:"Alemania"},a:{f:"🇨🇼",n:"Curaçao"},venue:"BMO Field, Toronto",group:"E",time:"17:00 ART"},{id:"g066",h:{f:"🇪🇨",n:"Ecuador"},a:{f:"🇨🇮",n:"Costa de Marfil"},venue:"Arrowhead, Kansas City",group:"E",time:"17:00 ART"},{id:"g067",h:{f:"🇸🇳",n:"Senegal"},a:{f:"🇮🇶",n:"Irak"},venue:"Lincoln Financial, Filadelfia",group:"I",time:"20:00 ART"},{id:"g068",h:{f:"🇫🇷",n:"Francia"},a:{f:"🇳🇴",n:"Noruega"},venue:"MetLife, Nueva York",group:"I",time:"20:00 ART"}]},
     {date:"27 Jun",day:"Sáb",matches:[{id:"g069",h:{f:"🇦🇷",n:"Argentina"},a:{f:"🇯🇴",n:"Jordania"},venue:"AT&T Stadium, Dallas",group:"J",time:"14:00 ART"},{id:"g070",h:{f:"🇩🇿",n:"Argelia"},a:{f:"🇦🇹",n:"Austria"},venue:"Levi's, San Francisco",group:"J",time:"14:00 ART"},{id:"g071",h:{f:"🏴󠁧󠁢󠁥󠁮󠁧󠁿",n:"Inglaterra"},a:{f:"🇵🇦",n:"Panamá"},venue:"BMO Field, Toronto",group:"L",time:"23:00 ART"},{id:"g072",h:{f:"🇭🇷",n:"Croacia"},a:{f:"🇵🇦",n:"Panamá"},venue:"NRG Stadium, Houston",group:"L",time:"23:00 ART"},{id:"g073",h:{f:"🇲🇦",n:"Marruecos"},a:{f:"🇭🇹",n:"Haití"},venue:"Gillette, Boston",group:"C",time:"17:00 ART"},{id:"g074",h:{f:"🇧🇷",n:"Brasil"},a:{f:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",n:"Escocia"},venue:"Lincoln Financial, Filadelfia",group:"C",time:"17:00 ART"}]}
   ],
-  r32:[{date:"28 Jun – 5 Jul",day:"",matches:[
-    {id:"r32_1",h:{f:"🏆",n:"1° Grupo A"},a:{f:"🏆",n:"2° Grupo B"},venue:"Estadio Azteca, México",group:"R32",time:"TBD"},
-    {id:"r32_2",h:{f:"🏆",n:"1° Grupo C"},a:{f:"🏆",n:"2° Grupo D"},venue:"MetLife, Nueva York",group:"R32",time:"TBD"},
-    {id:"r32_3",h:{f:"🏆",n:"1° Grupo E"},a:{f:"🏆",n:"2° Grupo F"},venue:"AT&T Stadium, Dallas",group:"R32",time:"TBD"},
-    {id:"r32_4",h:{f:"🏆",n:"1° Grupo G"},a:{f:"🏆",n:"2° Grupo H"},venue:"SoFi Stadium, Los Ángeles",group:"R32",time:"TBD"},
-    {id:"r32_5",h:{f:"🏆",n:"1° Grupo I"},a:{f:"🏆",n:"2° Grupo J"},venue:"Arrowhead, Kansas City",group:"R32",time:"TBD"},
-    {id:"r32_6",h:{f:"🏆",n:"1° Grupo K"},a:{f:"🏆",n:"2° Grupo L"},venue:"NRG Stadium, Houston",group:"R32",time:"TBD"},
-    {id:"r32_7",h:{f:"🏆",n:"1° Grupo B"},a:{f:"🏆",n:"2° Grupo A"},venue:"BC Place, Vancouver",group:"R32",time:"TBD"},
-    {id:"r32_8",h:{f:"🏆",n:"1° Grupo D"},a:{f:"🏆",n:"2° Grupo C"},venue:"Mercedes-Benz, Atlanta",group:"R32",time:"TBD"},
-    {id:"r32_9",h:{f:"🏆",n:"1° Grupo F"},a:{f:"🏆",n:"2° Grupo E"},venue:"Gillette, Boston",group:"R32",time:"TBD"},
-    {id:"r32_10",h:{f:"🏆",n:"1° Grupo H"},a:{f:"🏆",n:"2° Grupo G"},venue:"Lumen Field, Seattle",group:"R32",time:"TBD"},
-    {id:"r32_11",h:{f:"🏆",n:"1° Grupo J"},a:{f:"🏆",n:"2° Grupo I"},venue:"Levi's, San Francisco",group:"R32",time:"TBD"},
-    {id:"r32_12",h:{f:"🏆",n:"1° Grupo L"},a:{f:"🏆",n:"2° Grupo K"},venue:"Lincoln Financial, Filadelfia",group:"R32",time:"TBD"},
-    {id:"r32_13",h:{f:"🏆",n:"3° mejor (1)"},a:{f:"🏆",n:"3° mejor (2)"},venue:"Hard Rock, Miami",group:"R32",time:"TBD"},
-    {id:"r32_14",h:{f:"🏆",n:"3° mejor (3)"},a:{f:"🏆",n:"3° mejor (4)"},venue:"BMO Field, Toronto",group:"R32",time:"TBD"},
-    {id:"r32_15",h:{f:"🏆",n:"3° mejor (5)"},a:{f:"🏆",n:"3° mejor (6)"},venue:"Estadio BBVA, Monterrey",group:"R32",time:"TBD"},
-    {id:"r32_16",h:{f:"🏆",n:"3° mejor (7)"},a:{f:"🏆",n:"3° mejor (8)"},venue:"Estadio Akron, Guadalajara",group:"R32",time:"TBD"}
-  ]}],
-  r16:[{date:"7–10 Jul",day:"",matches:[
-    {id:"r16_1",h:{f:"🏆",n:"Gan. R32-1"},a:{f:"🏆",n:"Gan. R32-2"},venue:"BC Place, Vancouver",group:"Octavos",time:"TBD"},
-    {id:"r16_2",h:{f:"🏆",n:"Gan. R32-3"},a:{f:"🏆",n:"Gan. R32-4"},venue:"Mercedes-Benz, Atlanta",group:"Octavos",time:"TBD"},
-    {id:"r16_3",h:{f:"🏆",n:"Gan. R32-5"},a:{f:"🏆",n:"Gan. R32-6"},venue:"Estadio Azteca, México",group:"Octavos",time:"TBD"},
-    {id:"r16_4",h:{f:"🏆",n:"Gan. R32-7"},a:{f:"🏆",n:"Gan. R32-8"},venue:"MetLife, Nueva York",group:"Octavos",time:"TBD"},
-    {id:"r16_5",h:{f:"🏆",n:"Gan. R32-9"},a:{f:"🏆",n:"Gan. R32-10"},venue:"Lumen Field, Seattle",group:"Octavos",time:"TBD"},
-    {id:"r16_6",h:{f:"🏆",n:"Gan. R32-11"},a:{f:"🏆",n:"Gan. R32-12"},venue:"AT&T Stadium, Dallas",group:"Octavos",time:"TBD"},
-    {id:"r16_7",h:{f:"🏆",n:"Gan. R32-13"},a:{f:"🏆",n:"Gan. R32-14"},venue:"NRG Stadium, Houston",group:"Octavos",time:"TBD"},
-    {id:"r16_8",h:{f:"🏆",n:"Gan. R32-15"},a:{f:"🏆",n:"Gan. R32-16"},venue:"Lincoln Financial, Filadelfia",group:"Octavos",time:"TBD"}
-  ]}],
-  qf:[{date:"12–13 Jul",day:"",matches:[
-    {id:"qf1",h:{f:"🏆",n:"Gan. Oct-1"},a:{f:"🏆",n:"Gan. Oct-2"},venue:"Gillette, Boston",group:"Cuartos",time:"TBD"},
-    {id:"qf2",h:{f:"🏆",n:"Gan. Oct-3"},a:{f:"🏆",n:"Gan. Oct-4"},venue:"SoFi Stadium, Los Ángeles",group:"Cuartos",time:"TBD"},
-    {id:"qf3",h:{f:"🏆",n:"Gan. Oct-5"},a:{f:"🏆",n:"Gan. Oct-6"},venue:"Hard Rock, Miami",group:"Cuartos",time:"TBD"},
-    {id:"qf4",h:{f:"🏆",n:"Gan. Oct-7"},a:{f:"🏆",n:"Gan. Oct-8"},venue:"Arrowhead, Kansas City",group:"Cuartos",time:"TBD"}
-  ]}],
-  sf:[
-    {date:"15 Jul",day:"Mar",matches:[{id:"sf1",h:{f:"🏆",n:"Gan. CF-1"},a:{f:"🏆",n:"Gan. CF-2"},venue:"AT&T Stadium, Dallas",group:"Semifinal",time:"TBD"}]},
-    {date:"16 Jul",day:"Mié",matches:[{id:"sf2",h:{f:"🏆",n:"Gan. CF-3"},a:{f:"🏆",n:"Gan. CF-4"},venue:"Mercedes-Benz, Atlanta",group:"Semifinal",time:"TBD"}]}
-  ],
+  r32:[{date:"28 Jun – 5 Jul",day:"",matches:[{id:"r32_1",h:{f:"🏆",n:"1° Grupo A"},a:{f:"🏆",n:"2° Grupo B"},venue:"Estadio Azteca, México",group:"R32",time:"TBD"},{id:"r32_2",h:{f:"🏆",n:"1° Grupo C"},a:{f:"🏆",n:"2° Grupo D"},venue:"MetLife, Nueva York",group:"R32",time:"TBD"},{id:"r32_3",h:{f:"🏆",n:"1° Grupo E"},a:{f:"🏆",n:"2° Grupo F"},venue:"AT&T Stadium, Dallas",group:"R32",time:"TBD"},{id:"r32_4",h:{f:"🏆",n:"1° Grupo G"},a:{f:"🏆",n:"2° Grupo H"},venue:"SoFi Stadium, Los Ángeles",group:"R32",time:"TBD"},{id:"r32_5",h:{f:"🏆",n:"1° Grupo I"},a:{f:"🏆",n:"2° Grupo J"},venue:"Arrowhead, Kansas City",group:"R32",time:"TBD"},{id:"r32_6",h:{f:"🏆",n:"1° Grupo K"},a:{f:"🏆",n:"2° Grupo L"},venue:"NRG Stadium, Houston",group:"R32",time:"TBD"},{id:"r32_7",h:{f:"🏆",n:"1° Grupo B"},a:{f:"🏆",n:"2° Grupo A"},venue:"BC Place, Vancouver",group:"R32",time:"TBD"},{id:"r32_8",h:{f:"🏆",n:"1° Grupo D"},a:{f:"🏆",n:"2° Grupo C"},venue:"Mercedes-Benz, Atlanta",group:"R32",time:"TBD"},{id:"r32_9",h:{f:"🏆",n:"1° Grupo F"},a:{f:"🏆",n:"2° Grupo E"},venue:"Gillette, Boston",group:"R32",time:"TBD"},{id:"r32_10",h:{f:"🏆",n:"1° Grupo H"},a:{f:"🏆",n:"2° Grupo G"},venue:"Lumen Field, Seattle",group:"R32",time:"TBD"},{id:"r32_11",h:{f:"🏆",n:"1° Grupo J"},a:{f:"🏆",n:"2° Grupo I"},venue:"Levi's, San Francisco",group:"R32",time:"TBD"},{id:"r32_12",h:{f:"🏆",n:"1° Grupo L"},a:{f:"🏆",n:"2° Grupo K"},venue:"Lincoln Financial, Filadelfia",group:"R32",time:"TBD"},{id:"r32_13",h:{f:"🏆",n:"3° mejor (1)"},a:{f:"🏆",n:"3° mejor (2)"},venue:"Hard Rock, Miami",group:"R32",time:"TBD"},{id:"r32_14",h:{f:"🏆",n:"3° mejor (3)"},a:{f:"🏆",n:"3° mejor (4)"},venue:"BMO Field, Toronto",group:"R32",time:"TBD"},{id:"r32_15",h:{f:"🏆",n:"3° mejor (5)"},a:{f:"🏆",n:"3° mejor (6)"},venue:"Estadio BBVA, Monterrey",group:"R32",time:"TBD"},{id:"r32_16",h:{f:"🏆",n:"3° mejor (7)"},a:{f:"🏆",n:"3° mejor (8)"},venue:"Estadio Akron, Guadalajara",group:"R32",time:"TBD"}]}],
+  r16:[{date:"7–10 Jul",day:"",matches:[{id:"r16_1",h:{f:"🏆",n:"Gan. R32-1"},a:{f:"🏆",n:"Gan. R32-2"},venue:"BC Place, Vancouver",group:"Octavos",time:"TBD"},{id:"r16_2",h:{f:"🏆",n:"Gan. R32-3"},a:{f:"🏆",n:"Gan. R32-4"},venue:"Mercedes-Benz, Atlanta",group:"Octavos",time:"TBD"},{id:"r16_3",h:{f:"🏆",n:"Gan. R32-5"},a:{f:"🏆",n:"Gan. R32-6"},venue:"Estadio Azteca, México",group:"Octavos",time:"TBD"},{id:"r16_4",h:{f:"🏆",n:"Gan. R32-7"},a:{f:"🏆",n:"Gan. R32-8"},venue:"MetLife, Nueva York",group:"Octavos",time:"TBD"},{id:"r16_5",h:{f:"🏆",n:"Gan. R32-9"},a:{f:"🏆",n:"Gan. R32-10"},venue:"Lumen Field, Seattle",group:"Octavos",time:"TBD"},{id:"r16_6",h:{f:"🏆",n:"Gan. R32-11"},a:{f:"🏆",n:"Gan. R32-12"},venue:"AT&T Stadium, Dallas",group:"Octavos",time:"TBD"},{id:"r16_7",h:{f:"🏆",n:"Gan. R32-13"},a:{f:"🏆",n:"Gan. R32-14"},venue:"NRG Stadium, Houston",group:"Octavos",time:"TBD"},{id:"r16_8",h:{f:"🏆",n:"Gan. R32-15"},a:{f:"🏆",n:"Gan. R32-16"},venue:"Lincoln Financial, Filadelfia",group:"Octavos",time:"TBD"}]}],
+  qf:[{date:"12–13 Jul",day:"",matches:[{id:"qf1",h:{f:"🏆",n:"Gan. Oct-1"},a:{f:"🏆",n:"Gan. Oct-2"},venue:"Gillette, Boston",group:"Cuartos",time:"TBD"},{id:"qf2",h:{f:"🏆",n:"Gan. Oct-3"},a:{f:"🏆",n:"Gan. Oct-4"},venue:"SoFi Stadium, Los Ángeles",group:"Cuartos",time:"TBD"},{id:"qf3",h:{f:"🏆",n:"Gan. Oct-5"},a:{f:"🏆",n:"Gan. Oct-6"},venue:"Hard Rock, Miami",group:"Cuartos",time:"TBD"},{id:"qf4",h:{f:"🏆",n:"Gan. Oct-7"},a:{f:"🏆",n:"Gan. Oct-8"},venue:"Arrowhead, Kansas City",group:"Cuartos",time:"TBD"}]}],
+  sf:[{date:"15 Jul",day:"Mar",matches:[{id:"sf1",h:{f:"🏆",n:"Gan. CF-1"},a:{f:"🏆",n:"Gan. CF-2"},venue:"AT&T Stadium, Dallas",group:"Semifinal",time:"TBD"}]},{date:"16 Jul",day:"Mié",matches:[{id:"sf2",h:{f:"🏆",n:"Gan. CF-3"},a:{f:"🏆",n:"Gan. CF-4"},venue:"Mercedes-Benz, Atlanta",group:"Semifinal",time:"TBD"}]}],
   tercer:[{date:"18 Jul",day:"Vie",matches:[{id:"3rd",h:{f:"🏆",n:"Perdedor SF-1"},a:{f:"🏆",n:"Perdedor SF-2"},venue:"Hard Rock, Miami",group:"3° Puesto",time:"TBD"}]}],
   final:[{date:"19 Jul",day:"Dom",matches:[{id:"final",h:{f:"🏆",n:"Ganador SF-1"},a:{f:"🏆",n:"Ganador SF-2"},venue:"MetLife Stadium, Nueva York",group:"🏆 FINAL",time:"TBD"}]}]
 };
@@ -719,8 +690,14 @@ function uS(){
   });
 }
 
-function setSort(s,btn){ curSort=s; document.querySelectorAll('.srtb').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); rebuildAll(); }
-function sF(f,btn){ curFilter=f; document.querySelectorAll('.fbtn').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); rebuildAll(); }
+/* FIX 6: setSort/sF invalidan paneles para forzar reconstrucción con nuevo sort/filter */
+function _invalidatePanels(){
+  document.querySelectorAll('[id^="SW-"]').forEach(function(sw){
+    sw._builtSort=''; sw._builtFilter='';
+  });
+}
+function setSort(s,btn){ curSort=s; document.querySelectorAll('.srtb').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); _invalidatePanels(); rebuildAll(); }
+function sF(f,btn){ curFilter=f; document.querySelectorAll('.fbtn').forEach(function(b){ b.classList.remove('active'); }); btn.classList.add('active'); _invalidatePanels(); rebuildAll(); }
 
 function buildAC(q){
   if(!q) return [];
@@ -793,12 +770,24 @@ function buildCard(c){
   return div;
 }
 
+/* FIX 5: tC reconstruye el panel si sort o filter cambiaron desde la última vez */
 function tC(code){
   var sw=document.getElementById('SW-'+code), ca=document.getElementById('CA-'+code), cv=document.getElementById('CV-'+code);
   if(!sw) return;
   var open=sw.style.display!=='none';
   if(open){ sw.style.display='none'; ca.style.display='none'; cv.classList.remove('open'); }
-  else{ sw.style.display='block'; ca.style.display='flex'; cv.classList.add('open'); if(!sw._built){ buildRows(code,sw); sw._built=true; } else { refreshAllRows(code); } if(typeof twemoji!=='undefined') twemoji.parse(sw,{folder:'svg',ext:'.svg'}); }
+  else{
+    sw.style.display='block'; ca.style.display='flex'; cv.classList.add('open');
+    var needRebuild = !sw._built || (sw._builtSort!==curSort) || (sw._builtFilter!==curFilter);
+    if(needRebuild){
+      sw.innerHTML=''; sw._built=false;
+      buildRows(code,sw);
+      sw._built=true; sw._builtSort=curSort; sw._builtFilter=curFilter;
+    } else {
+      refreshAllRows(code);
+    }
+    if(typeof twemoji!=='undefined') twemoji.parse(sw,{folder:'svg',ext:'.svg'});
+  }
 }
 
 function buildRows(code,sw){
@@ -821,12 +810,15 @@ function refreshAllRows(code){
   var c=COUNTRIES.find(function(x){ return x.code===code; }); if(!c) return;
   c.s.forEach(function(s){ refreshRow(code+'_'+s.n); });
 }
+
+/* FIX 4: mAll usa saveNow() para guardar inmediatamente sin delay,
+   evitando que onSnapshot del servidor pise el cambio local */
 function mAll(code,state){
   var c=COUNTRIES.find(function(x){ return x.code===code; }); if(!c) return;
   c.s.forEach(function(s){ if(state==='f'){ delete COL[code+'_'+s.n]; } else { COL[code+'_'+s.n]='tengo'; } });
-  scheduleSave(); uS();
+  saveNow(); uS();
   var sw=document.getElementById('SW-'+code);
-  if(sw&&sw._built){ sw.innerHTML=''; sw._built=false; buildRows(code,sw); sw._built=true; }
+  if(sw&&sw._built){ sw.innerHTML=''; sw._built=false; buildRows(code,sw); sw._built=true; sw._builtSort=curSort; sw._builtFilter=curFilter; }
   showToast(state==='tengo'?'✓ Todas marcadas':'Todas desmarcadas');
 }
 
@@ -889,7 +881,6 @@ function sWA(){
   else if(navigator.clipboard) navigator.clipboard.writeText(msg).then(function(){ showToast('Lista copiada'); });
 }
 
-/* ══ TABS ══ */
 function switchTab(tab,btn){
   document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
@@ -901,7 +892,6 @@ function switchTab(tab,btn){
   if(tab==='prode'){ computeProdeScores(); renderResultados(); }
 }
 
-/* ══ FIXTURE ══ */
 var currentPhase='grupos';
 function showPhase(phase,btn){
   currentPhase=phase;
@@ -972,7 +962,6 @@ function computeProdeScores(){
   var el=document.getElementById('prode-pts'); if(el) el.textContent=total;
 }
 
-/* ══ GRUPOS ══ */
 function computeGroupStats(){
   var stats={};
   Object.entries(GRUPOS_DATA).forEach(function(entry){
@@ -1030,14 +1019,6 @@ function renderGroupsActive(){
   if(typeof twemoji!=='undefined') twemoji.parse(cont,{folder:'svg',ext:'.svg'});
 }
 
-function inviteFriend(){
-  var email=document.getElementById('invite-email').value.trim();
-  if(!email){ showToast('Ingresá un email válido'); return; }
-  showToast('✉️ Invitación a '+email+' (próximamente)');
-  document.getElementById('invite-email').value='';
-}
-
-/* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('si').addEventListener('input', function(){
     var codes=this.value.trim().toUpperCase().replace(/,/g,' ').split(/\s+/).filter(Boolean);
@@ -1064,10 +1045,6 @@ document.addEventListener('DOMContentLoaded', function(){
   var cg=document.getElementById('cg'); COCA.forEach(function(s){ cg.appendChild(mkTile('CC_'+s.c,s.c,s.n,false,true)); });
 });
 
-
-/* ===== v8 NEW FEATURES (no redefine base) ===== */
-
-/* Dark mode */
 var _dk=localStorage.getItem('pd')==='1';
 function apDk(){
   document.body.classList.toggle('dark',_dk);
@@ -1075,7 +1052,6 @@ function apDk(){
   if(b) b.textContent=_dk?'\u2600\uFE0F':'\uD83C\uDF19';
 }
 
-/* Fixture view (list/calendar) */
 window._fxv='list';
 function setFxV(v,btn){
   window._fxv=v;
@@ -1084,7 +1060,6 @@ function setFxV(v,btn){
   renderFixtureActive();
 }
 
-/* Match lock 1hr before */
 function isMatchLocked(m){
   try{
     if(!m.time||m.time==='TBD') return false;
@@ -1096,7 +1071,6 @@ function isMatchLocked(m){
   }catch(e){ return false; }
 }
 
-/* Calendar */
 function renderCalendar(cont){
   var hdr=document.createElement('div'); hdr.className='cal-header';
   ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'].forEach(function(d){
@@ -1131,7 +1105,6 @@ function renderCalendar(cont){
   cont.appendChild(grid);
 }
 
-/* Cargar resultados (Prode tab) */
 function renderResultados(){
   var cont=document.getElementById('res-cont'); if(!cont) return; cont.innerHTML='';
   var pend=[];
@@ -1167,7 +1140,6 @@ function saveRes(id){
   });
 }
 
-/* Torneos */
 var _curT=null; window._torn=[];
 function loadTorneosForUser(uid){
   db.collection('torneos').where('members','array-contains',uid).onSnapshot(function(snap){
@@ -1226,7 +1198,6 @@ function renderTorneoList(){
   });
 }
 
-/* Push notifications */
 var FCM_KEY='BB8y8o-4RtiIqfDXMZedr_im-lmTHDpFTu11EMw6HadfReYRz11xvGPN-_2th8a5j3LagNPYu1BIyOru8IypJtw';
 function reqPush(){
   if(!('Notification' in window)){ showToast('No compatible'); return; }
@@ -1246,7 +1217,6 @@ function reqPush(){
   });
 }
 
-/* Init dark mode + dark button + twemoji + load torneos */
 apDk();
 (function(){
   var dtb=document.getElementById('dt');
@@ -1255,7 +1225,6 @@ apDk();
 if(typeof twemoji!=='undefined') twemoji.parse(document.body,{folder:'svg',ext:'.svg'});
 auth.onAuthStateChanged(function(user){ if(user) loadTorneosForUser(user.uid); });
 if('serviceWorker' in navigator) navigator.serviceWorker.register('/panini2026/sw.js').catch(function(){});
-
 </script>
 </body>
 </html>
